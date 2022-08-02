@@ -2,7 +2,8 @@ import nltk
 import spacy
 
 nltk.download('punkt')
-nlp = spacy.load("en_core_web_sm")
+#nlp = spacy.load("en_core_web_sm")
+nlp = []
 stemmer = nltk.stem.porter.PorterStemmer()
 
 

@@ -1,6 +1,7 @@
-from pygaggle.pygaggle.rerank.transformer import MonoBERT
-from rank_bm25 import BM25Okapi
+from pygaggle.rerank.transformer import MonoBERT
+from pyserini.search.lucene import LuceneSearch
 from simplet5 import SimpleT5
+import pandas as pd
 
 from get_data import *
 from testing_main import *
@@ -9,30 +10,28 @@ from canonical_testing_main import *
 
 if __name__ == '__main__':
     EVALUATION_DATA_FILE_NAME = "data/2020_automatic_evaluation_topics_v1.json"
-    MS_MARCO_DATA_FILE_NAME = "data/ms_marco_collection.tsv"
-    CAR_DATA_FILE_NAME = "data/dedup.articles-paragraphs.cbor"
+    CANONICAL_MS_MARCO_DATA_FILE_NAME = "data/canonical_ms_marco"
+    CANONICAL_CAR_DATA_FILE_NAME = "data/canonical_car"
 
     evaluation_data_json = get_evaluation_data(EVALUATION_DATA_FILE_NAME)
-    ms_marco_collection_df = get_ms_marco_data(MS_MARCO_DATA_FILE_NAME)
-    with open(CAR_DATA_FILE_NAME, 'rb') as f:
-        car_collection_df = get_car_collection(f)
+    print("Evaluation json returned.")
+    canonical_ms_marco_df = get_canonical_df(CANONICAL_MS_MARCO_DATA_FILE_NAME)
+    print("Canonical MS Marco returned.")
+    canonical_car_df = get_canonical_df(CANONICAL_CAR_DATA_FILE_NAME)
+    print("Canonical car returned.")
 
-    corpus_df = pd.concat([ms_marco_collection_df, car_collection_df])
-
-    corpus = corpus_df["paragraph"]
-    tokenized_corpus = [x.split(" ") for x in corpus]
-    BM25 = BM25Okapi(tokenized_corpus, k1=4.46, b=0.82)
-
+    # Set the searcher/ranker that uses the index made out of car and msmarco datasets
+    searcher = LuceneSearch('data/indexes/lucene-index-msmarco-passage')
+    # Set the reranker to MonoBERT
     reranker = MonoBERT()
+
+    # Set and test the query rewriter
     T5 = SimpleT5()
     T5.load_model("t5", "data/simplet5", use_gpu=True)
-
     test = "How much does it cost for someone to fix it? Why did garage door opener stop working? How do you know " \
            "when your garage door opener is going bad? "
     T5.predict(test)
+    print("T5 ready and tested.")
 
-    main_loop(corpus, evaluation_data_json, BM25, MonoBERT, T5, "h2oloo")
-
-    canonical_main_loop(ms_marco_collection_df, car_collection_df, evaluation_data_json, T5, "h2oloo")
-
-
+    main_loop(evaluation_data_json, searcher, reranker, T5, "h2oloo")
+    canonical_main_loop(canonical_ms_marco_df, canonical_car_df, evaluation_data_json, T5, "h2oloo")

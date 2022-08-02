@@ -1,5 +1,4 @@
 import json
-from read_data import *
 import pandas as pd
 
 
@@ -10,17 +9,8 @@ def get_evaluation_data(file_name):
     return queries_json
 
 
-def get_ms_marco_data(file_name):
-    return pd.read_csv(file_name, names=['id', 'paragraph'], sep='\t')
-
-
-def get_car_collection(file_name):
-    ids, paragraphs = [], []
-    for p in iter_paragraphs(file_name):
-        ids.append(p.para_id)
-        paragraphs.append(p)
-        print(p.para_id)
-        print(p)
-
-    car_df = pd.DataFrame(data=[ids, paragraphs], names=['id', 'paragraph'])
-    return car_df
+def get_canonical_df(canonical_file_name):
+    header_list = ['id', 'paragraph']
+    df = pd.read_csv(canonical_file_name, names=header_list, sep='\t')
+    df = df.iloc[1:]
+    return df
