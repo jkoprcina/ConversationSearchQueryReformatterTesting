@@ -33,5 +33,7 @@ if __name__ == '__main__':
     T5.predict(test)
     print("T5 ready and tested.")
 
-    main_loop(evaluation_data_json, searcher, reranker, T5, "h2oloo")
-    canonical_main_loop(canonical_ms_marco_df, canonical_car_df, evaluation_data_json, T5, "h2oloo")
+    paragraph_usage_options = ["h2oloo", "full paragraph", "no paragraph"]
+    for paragraph_usage_option in paragraph_usage_options:
+        main_loop(evaluation_data_json, searcher, reranker, T5, paragraph_usage_option)
+        canonical_main_loop(canonical_ms_marco_df, canonical_car_df, evaluation_data_json, T5, paragraph_usage_option)

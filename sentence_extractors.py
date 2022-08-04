@@ -2,8 +2,7 @@ import nltk
 import spacy
 
 nltk.download('punkt')
-#nlp = spacy.load("en_core_web_sm")
-nlp = []
+nlp = spacy.load("en_core_web_sm")
 stemmer = nltk.stem.porter.PorterStemmer()
 
 
@@ -31,7 +30,7 @@ def h2oloo_find_sentence(paragraph, query):
                 if query_word == sentence_word:
                     sentence["value"] += 1
 
-    sentence_to_return = False
+    sentence_to_return = ""
     value = 0
     for sentence in cleaned_paragraph:
         if sentence["value"] > value:
