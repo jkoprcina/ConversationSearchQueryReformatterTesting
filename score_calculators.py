@@ -117,7 +117,3 @@ def calculate_ndcg(y):
         y_scores = [[pair["score"] for pair in returned_paragraphs]]
         ndcg3_sum += ndcg_score(y_true, y_scores, k=1000)
     return ndcg3_sum / len(y)
-
-
-def calculate_map_score(y, run):
-    return True
