@@ -7,11 +7,12 @@ from score_calculators import calculate_ndcg3_score
 
 
 def testing_retrieval_reranking(evaluation_data_json, BM25, MonoBERT):
+    BM25.set_bm25(k1=1.2, b=0.75)
     y = []
     for topic in evaluation_data_json:
         for turn in topic["turn"]:
 
-            hits = BM25.search(Query(turn["automatic_rewritten_utterance"]).text, k=1000)
+            hits = BM25.search(Query(turn["manual_rewritten_utterance"]).text, k=1000)
             texts = hits_to_texts(hits)
 
             reranked = MonoBERT.rerank(Query(turn["raw_utterance"]), texts)
@@ -22,7 +23,7 @@ def testing_retrieval_reranking(evaluation_data_json, BM25, MonoBERT):
                 "turn": turn["number"],
 
                 "returned_paragraph_id": [json.loads(x[1])["id"] for x in reranked_paragraphs],
-                "automatically_returned_paragraph_id": turn["automatic_canonical_result_id"],
+                "manual_returned_paragraph_id": turn["manual_canonical_result_id"],
                 "returned_paragraphs": reranked_paragraphs,
             })
 

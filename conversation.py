@@ -1,4 +1,4 @@
-from sentence_extractors import h2oloo_find_sentence
+from sentence_extractors import h2oloo_find_sentence, cosine_find_sentence
 
 
 class Conversation:
@@ -19,9 +19,12 @@ class Conversation:
         sentence = h2oloo_find_sentence(self.paragraphs[-1], self.queries[-1])
         self.sentences.append(sentence)
 
+    def add_cosine_similar_sentence(self):
+        sentence = cosine_find_sentence(self.paragraphs[-1], self.queries[-1])
+        self.sentences.append(sentence)
+
     def add_summarization(self, summarizer, max_length, min_length):
-        self.summarizations.append(summarizer(
-            self.paragraphs[-1], max_length=max_length, min_length=min_length, do_sample=False)[0].get("summary_text"))
+        self.summarizations.append(summarizer(self.paragraphs[-1], max_length=max_length, min_length=min_length, do_sample=False)[0].get("summary_text"))
 
     def add_to_rewritten_queries(self, query):
         self.rewritten_queries.append(query)

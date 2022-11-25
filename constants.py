@@ -1,4 +1,4 @@
-EVALUATION_DATA_FILE_LOCATION = 'data/2020_automatic_evaluation_topics_v1.json'
+EVALUATION_DATA_FILE_LOCATION = 'data/2020_manual_evaluation_topics_v1.json'
 CANONICAL_MS_MARCO_DATA_FILE_LOCATION = 'data/canonical_ms_marco'
 CANONICAL_CAR_DATA_FILE_LOCATION = 'data/canonical_car'
 SEARCHER_DATA_FILE_LOCATION = 'data/indexes/lucene-index-msmarco-passage'
@@ -6,11 +6,19 @@ PERSONAL_T5_REWRITER_CONFIG_LOCATION = 'data/simplet5'
 BASE_T5_REWRITER_CONFIG_LOCATION = 'data/h2osimplet5'
 T5_SUMMARIZER_CONFIG_LOCATION = 'data/t5summarize'
 DATA_USAGE_TYPES = [
-    'previous_query',
-    'no_paragraph',
+    'all_raw_queries',
+    'all_rewritten_queries',
 
-    'one_similar_sentence',
+    'all_raw_queries_all_paragraphs',
+    'all_raw_queries_all_similar_sentences',
+    'all_raw_queries_one_similar_sentences',
+    'all_rewritten_queries_one_similar_sentence',
+
+    'all_raw_queries_no_paragraph',
+    'all_rewritten_queries_no_paragraph',
+    'one_cosine_similar_sentence',
     'all_similar_sentences',
+    'all_cosine_similar_sentences',
     'one_full_paragraph',
 
     'one_short_summarized_paragraph',
