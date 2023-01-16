@@ -1,13 +1,9 @@
 from pygaggle.rerank.base import Query, hits_to_texts
-import json
 import neptune.new as neptune
-
-from constants import API_TOKEN, PROJECT
-from score_calculators import calculate_ndcg3_score
+from score_calculators import *
 
 
 def testing_retrieval_reranking(evaluation_data_json, BM25, MonoBERT):
-    BM25.set_bm25(k1=1.2, b=0.75)
     y = []
     for topic in evaluation_data_json:
         for turn in topic["turn"]:
@@ -15,7 +11,7 @@ def testing_retrieval_reranking(evaluation_data_json, BM25, MonoBERT):
             hits = BM25.search(Query(turn["manual_rewritten_utterance"]).text, k=1000)
             texts = hits_to_texts(hits)
 
-            reranked = MonoBERT.rerank(Query(turn["raw_utterance"]), texts)
+            reranked = MonoBERT.rerank(Query(turn["manual_rewritten_utterance"]), texts)
             reranked.sort(key=lambda x: x.score, reverse=True)
             reranked_paragraphs = [[p.score, p.text] for p in reranked]
 
@@ -29,4 +25,4 @@ def testing_retrieval_reranking(evaluation_data_json, BM25, MonoBERT):
 
     run = neptune.init(project=PROJECT, api_token=API_TOKEN)
     run["run_type"] = "testing_retrieval_reranking"
-    calculate_ndcg3_score(y, run)
+    calculate_and_log_ndcg3_score(y, run)

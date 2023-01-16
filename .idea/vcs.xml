@@ -2,8 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/pygaggle_all" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/pygaggle_all/tools" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/pyserini_all" vcs="Git" />
   </component>
 </project>

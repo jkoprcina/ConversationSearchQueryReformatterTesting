@@ -60,15 +60,18 @@ def cosine_find_sentence(paragraph, query):
 
         for i in range(len(rvector)):
             c += l1[i] * l2[i]
-        cosine = c / float((sum(l1) * sum(l2)) ** 0.5)
+        right = float((sum(l1) * sum(l2)) ** 0.5)
+        if right == 0:
+            cosine = c / 0.00001
+        else:
+            cosine = c / float((sum(l1) * sum(l2)) ** 0.5)
         remember_results.append({"result": cosine, "sentence": sentence})
 
-    print(remember_results)
     best_result = {"result": 0, "sentence": ""}
     for result in remember_results:
         if result["result"] > best_result["result"]:
             best_result = result
-    return best_result["sentence"]
+    return str(best_result["sentence"])
 
 
 def text_useful_word_count(text):

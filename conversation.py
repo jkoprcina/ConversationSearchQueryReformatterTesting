@@ -8,6 +8,7 @@ class Conversation:
         self.paragraphs = []
         self.summarizations = []
         self.rewritten_queries = []
+        self.golden_queries = []
 
     def add_query(self, query):
         self.queries.append(query)
@@ -24,7 +25,12 @@ class Conversation:
         self.sentences.append(sentence)
 
     def add_summarization(self, summarizer, max_length, min_length):
-        self.summarizations.append(summarizer(self.paragraphs[-1], max_length=max_length, min_length=min_length, do_sample=False)[0].get("summary_text"))
+        self.summarizations.append(summarizer(
+            self.paragraphs[-1], max_length=max_length, min_length=min_length, do_sample=False)[0].get("summary_text"))
 
-    def add_to_rewritten_queries(self, query):
+    def add_rewritten_query(self, query):
         self.rewritten_queries.append(query)
+
+    def add_golden_query(self, query):
+        self.golden_queries.append(query)
+
